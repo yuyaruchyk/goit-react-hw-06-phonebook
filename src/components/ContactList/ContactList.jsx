@@ -1,38 +1,35 @@
 import { BtnDelete, List, Name } from './ContactList.styled';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePhone } from 'redux/contactListReducer';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contactList.contacts);
-  const filter = useSelector(state => state.contactList.filter);
 
-  const filteredContacts = contacts.filter(contact => {
-  const contactName = contact.name.toLowerCase();
-  const contactNumber = contact.number;
-    return (
-      contactName.includes(filter.toLowerCase()) ||
-      contactNumber.includes(filter)
-    );
-  });
 
-  const numbersList = filteredContacts;
+  const contacts = useSelector((state) => state.contactList.contacts);
+    const filter = useSelector((state) => state.filter.filter)
+
+    const filterContactsByName = () => {
+        const ff = filter.toLowerCase() ?? '';
+        return contacts.filter(contact => contact.name.toLowerCase().includes(ff))
+    }
+
+    const list = filterContactsByName();
+
+  
 
   return (
     <ul>
-      {numbersList.map(item => {
-        return (
-          <List key={item.id}>
-            <Name>
-              {item.name}: <span>{item.number}</span>
-            </Name>
-            <BtnDelete onClick={() => dispatch(deletePhone(item.id))}>
-              Delete
-            </BtnDelete>
-          </List>
-        );
-      })}
+      {list.map(item => (
+        <List key={item.id}>
+          <Name>
+            {item.name}: <span>{item.number}</span>
+          </Name>
+          <BtnDelete onClick={() => dispatch(deletePhone(item.id))}>
+            Delete
+          </BtnDelete>
+        </List>
+      ))}
     </ul>
   );
 };
