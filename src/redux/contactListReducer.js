@@ -1,4 +1,3 @@
-
 const { createSlice } = require('@reduxjs/toolkit');
 
 const contactsInitialState = {
@@ -10,7 +9,16 @@ const contactListSlice = createSlice({
   initialState: contactsInitialState,
   reducers: {
     addPhone: (state, action) => {
-      state.contacts.push(action.payload);
+      const newContact = action.payload;
+      const contactExists = state.contacts.some(
+        contact => contact.name === newContact.name
+      );
+
+      if (contactExists) {
+        alert('Contact with the same number already exists!');
+      } else {
+        state.contacts.push(action.payload);
+      }
     },
 
     setPhone: (state, action) => {
@@ -18,7 +26,9 @@ const contactListSlice = createSlice({
     },
 
     deletePhone: (state, action) => {
-      const index = state.contacts.findIndex(contact => contact.id === action.payload);
+      const index = state.contacts.findIndex(
+        contact => contact.id === action.payload
+      );
       if (index !== -1) {
         state.contacts.splice(index, 1);
       }
