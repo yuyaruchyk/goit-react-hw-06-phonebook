@@ -1,3 +1,7 @@
+import { nanoid } from 'nanoid';
+
+
+
 const { createSlice } = require('@reduxjs/toolkit');
 
 const contactsInitialState = {
@@ -9,7 +13,10 @@ const contactListSlice = createSlice({
   initialState: contactsInitialState,
   reducers: {
     addPhone: (state, action) => {
-      const newContact = action.payload;
+        const newContact = {
+        id: nanoid(),
+        ...action.payload,
+      };
       const contactExists = state.contacts.some(
         contact => contact.name === newContact.name
       );
@@ -17,7 +24,7 @@ const contactListSlice = createSlice({
       if (contactExists) {
         alert('Contact with the same number already exists!');
       } else {
-        state.contacts.push(action.payload);
+        state.contacts.push(newContact);
       }
     },
 
