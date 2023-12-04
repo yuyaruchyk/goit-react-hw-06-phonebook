@@ -1,7 +1,8 @@
 import { MainForm, Btn, StyledLabel, StyledField, Error } from './ContactForm.styled';
 import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { Formik,  } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
 import { addPhone } from 'redux/contactListReducer'; 
 
 const PhonebookSchema = Yup.object().shape({
@@ -11,13 +12,19 @@ const PhonebookSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  
+ const handleAddPhone = (values, actions) => {
+    if (contacts.some((contact) => contact.name === values.name)) {
+      alert('Contact with the same name already exists!');
+    } else {
+      dispatch(addPhone(values));
+    }
 
-  const handleAddPhone = (values) => {
-    
-    dispatch(addPhone(values));
+    actions.resetForm();
   };
 
-  return (
+   return (
     <Formik
       initialValues={{
         name: '',

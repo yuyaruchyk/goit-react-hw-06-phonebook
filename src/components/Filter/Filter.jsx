@@ -3,10 +3,11 @@
 import { FilterSection, Input, StyledTitle, StyledSection } from './Filter.styled.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/filterReducer.js'; 
+import { selectFilter } from 'redux/selectors.js';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.filter.filter); 
+  const filter = useSelector(selectFilter); 
 
   const handleSearchNumber = value => {
     dispatch(setFilter(value));
